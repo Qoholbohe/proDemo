@@ -33,6 +33,24 @@ gulp.task('browserSync',function(){
     })
 })
 
+gulp.task('gulp-ejs', function(){
+    　　gulp.src(root+'/**/*.html')
+    　　.pipe(data(function (file) {
+    　　var filePath = file.path;
+    　　　　// global.json 全局数据，页面中直接通过属性名调用
+    　　　　return Object.assign(JSON.parse(fs.readFileSync(模版目录+ '/global.json')), {
+    　　　　　　// local: 每个页面对应的数据，页面中通过 local.属性 调用
+    　　　　　　local: JSON.parse(fs.readFileSync( path.join(path.dirname(filePath), path.basename(filePath, '.html') + '.json')))
+    　　　　}) 
+    　　}))
+    　　.pipe(ejs().on('error', function(err) {
+    　　　　gutil.log(err);
+    　　　　this.emit('end');
+    　　}))
+    　　.pipe(gulp.dest(生成目录));
+    });
+
+
 //sass文件编译
 gulp.task('sass', function () {
     gulp.src(sassDir+'/**/*.scss')
@@ -66,7 +84,7 @@ gulp.task('css', function () {
 gulp.task('js', function () {
     gulp.src(staticDir+'/js/**/*.js')
         .pipe(gulp.dest(distStaticAll+"/js"))
-        .pipe(rename({suffix: '.min'}))   //rename压缩后的文件名
+        .pipe(rename({suffix:'.min'}))   //rename压缩后的文件名
         .pipe(uglify())    //压缩
         .pipe(gulp.dest(distStaticDir+"/js"));  //输出
 });
@@ -100,7 +118,7 @@ gulp.task('watch',['browserSync','html','sass','css',"js"],function(){
     gulp.watch(staticDir+'/js/**/*.js',['js'],browserSync.reload);
 })
 
-gulp.task('build', function (callback) {
+gulp.task('default', function (callback) {
     runSequence([
         'clean-all',
         'sass',
