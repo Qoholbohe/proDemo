@@ -8,7 +8,6 @@ var htmlmin = require('gulp-htmlmin'); //压缩html
 var uglify = require('gulp-uglify'); //压缩js
 var minifycss=require('gulp-minify-css');  //css压缩
 var runSequence = require('run-sequence'); //执行顺序，避免
-var connect = require('gulp-connect');  //搭建服务
 var browserSync = require('browser-sync').create();//实时加载
 var useref = require('gulp-useref');  //gulp-useref 连接一定数量的CSS和JavaScript文件在一个单独的文件里，通过寻找一个注释
 var imagemin = require('gulp-imagemin'); //图片压缩
@@ -24,19 +23,12 @@ var distHTML = distDir + "/html";  //发布页面目录
 var distStaticDir = distDir + '/static';  // 发布静态资源压缩目录
 var distStaticAll=distDir + '/static/uncompressed'  //静态资源目录
 
-gulp.task('myServer', function() {
-    connect.server({
-      root: 'dist',
-      port: 8080,
-      livereload: true
-    });
-  });
-
 gulp.task('browserSync',function(){
     browserSync.init({
+        port: 8080,
         server: {
-            baseDir:'app',
-            port: 8080,
+            baseDir:'./',  // 设置服务器的根目录
+             index:'/dist/html/index.html' // 指定默认打开的文件
         },
     })
 })
