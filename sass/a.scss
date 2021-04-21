@@ -1,0 +1,8 @@
+$nav-color: red;
+nav {
+  $width: 100px;
+  width: $width;
+  color: $nav-color;
+  font-size: 2rem;
+  background: yellow;
+}
